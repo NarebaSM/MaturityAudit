@@ -55,6 +55,16 @@ def login():
         return f"Login Failed :("
 
 
+@app.route('/forms', methods=['GET', 'POST'])
+def forms():
+    token = request.args.get('token')
+
+    try:
+        payload = jwt.decode(token, base64.b16decode())
+    except jwt.ExpiredSignatureError:
+        return
+    return
+
 
 @app.route('/register', methods=['GET'])
 def register():
