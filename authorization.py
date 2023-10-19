@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
-import os
+from flask import Flask, render_template, request, redirect, url_for, jsonify, abort, make_response, Response
 import json
 import jwt
 import datetime
@@ -7,12 +6,13 @@ import hashlib
 import base64
 
 
-def generate_token(username, password):
+def generate_token(username, secret):
+    expiration_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
     payload = {
         'username': username,
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1)
+        'exp': expiration_time
     }
-    token = jwt.encode(payload, password, algorithm=HS256)
+    token = jwt.encode(payload, secret, algorithm='HS256')
     return token
 
 def generate_secret_key(username, password):
@@ -50,21 +50,54 @@ def login():
 
     items = getUserItems(username)
     if username == items['username'] and password == items['password']:
-        return "Login Success!"
+        token = generate_token(items['username'], items['secretId'])
+        response = make_response(redirect(url_for('forms')))
+        response.set_cookie("Authorization", f"Bearer {token}")
+        response.set_cookie("secret", f"{items['secretId']}")
+        return response
     else:
         return f"Login Failed :("
 
 
 @app.route('/forms', methods=['GET', 'POST'])
 def forms():
-    token = request.args.get('token')
 
-    try:
-        payload = jwt.decode(token, base64.b16decode())
-    except jwt.ExpiredSignatureError:
-        return
-    return
+    token = request.cookies.get("Authorization")
 
+    if token and token.startswith('Bearer'):
+        token = token.split(' ')[1]
+        try:
+
+            secretId = request.cookies.get('secret')
+
+            payload = jwt.decode(token, secretId, algorithms=['HS256'])
+            if datetime.datetime.utcnow() < datetime.datetime.utcfromtimestamp(payload['exp']):
+                username = payload['username']
+
+                userItems = getUserItems(username)
+
+                if request.method == 'POST':
+                    q1 = request.form['question1']
+
+                    questoes = {}
+
+                    for questao in request.form:
+                        print(f"questao {questao}")
+
+                    user_responses = {
+                        f"{username}": {
+                        }
+                    }
+                elif request.method == 'GET':
+                    return render_template('forms.html')
+                else:
+                    abort(404, description="Não consegui fazer nada :(")
+        except jwt.ExpiredSignatureError:
+            abort(401, description="Token expirado. Faça login novamente.")
+        except jwt.InvalidTokenError:
+            abort(401, description="Token inválido. Faça login novamente.")
+    else:
+        abort(401, description="Token não fornecido. Faça login primeiro.")
 
 @app.route('/register', methods=['GET'])
 def register():

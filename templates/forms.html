@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <title>Auditoria em Datacenter</title>
 </head>
 <body>
@@ -39,7 +39,7 @@
                             <span>
                                 <input type="radio" name="nivel1" value="4" id="nivel1_4">
                                 <label for="nivel1_4"></label>
-                                <span class "level-number">4</span>
+                                <span class="level-number">4</span>
                             </span>
                             <span>
                                 <input type="radio" name="nivel1" value="5" id="nivel1_5">
