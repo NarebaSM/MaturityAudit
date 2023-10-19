@@ -1,57 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <title>Auditoria em Datacenter</title>
-</head>
-<body>
-    <h1>Questionário: Auditoria em Datacenter</h1>
-    <div class="center">
-        <form>
-            <table>
-                <tr>
-                    <th>Pergunta</th>
-                    <td></td>
-                    <th>Nível</th>
-                </tr>
-                <!-- Adicione mais perguntas e respostas aqui, se necessário -->
-                <tr>
-                    <td>O que é HTML?</td>
-                    <td></td>
-                    <td class="level">
-                        <span class="rating">
-                            <span>
-                                <input type="radio" name="nivel1" value="1" id="nivel1_1">
-                                <label for="nivel1_1"></label>
-                                <span class="level-number">1</span>
-                            </span>
-                            <span>
-                                <input type="radio" name="nivel1" value="2" id="nivel1_2">
-                                <label for="nivel1_2"></label>
-                                <span class="level-number">2</span>
-                            </span>
-                            <span>
-                                <input type="radio" name="nivel1" value="3" id="nivel1_3">
-                                <label for="nivel1_3"></label>
-                                <span class="level-number">3</span>
-                            </span>
-                            <span>
-                                <input type="radio" name="nivel1" value="4" id="nivel1_4">
-                                <label for="nivel1_4"></label>
-                                <span class "level-number">4</span>
-                            </span>
-                            <span>
-                                <input type="radio" name="nivel1" value="5" id="nivel1_5">
-                                <label for="nivel1_5"></label>
-                                <span class="level-number">5</span>
-                            </span>
-                        </span>
-                    </td>
-                </tr>
-            </table>
-            <input type="submit" value="Enviar respostas">
-        </form>
-    </div>
-</body>
-</html>
+body {
+    background-color: rgb(255, 255, 255);
+}
+
+h1 {
+    text-align: center;
+}
+
+table {
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+th, td {
+    padding: 10px;
+}
+
+.center {
+    text-align: center;
+}
+
+form {
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: 10px;
+}
+
+.rating {
+    font-size: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.rating input[type="radio"] {
+    display: none;
+}
+
+.rating label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.rating label[for="nivel1_1"] { background-color: #ff0000; }
+.rating label[for="nivel1_2"] { background-color: #ff6600; }
+.rating label[for="nivel1_3"] { background-color: #ffcc00; }
+.rating label[for="nivel1_4"] { background-color: #66ff33; }
+.rating label[for="nivel1_5"] { background-color: #00ff00; }
+
+.rating input[type="radio"]:checked + label::before {
+    content: "✔";
+    color: #009900;
+}
+
+.level-number {
+    font-size: 12px;
+    margin-top: 3px;
+}
+
