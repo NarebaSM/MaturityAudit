@@ -43,23 +43,27 @@ def index():
 
     return render_template('index.html')
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    username = request.form['username']
-    password = request.form['password']
 
-    items = getUserItems(username)
-    if username == items['username'] and password == items['password']:
-        token = generate_token(items['username'], items['secretId'])
-        response = make_response(redirect(url_for('forms')))
-        response.set_cookie("Authorization", f"Bearer {token}")
-        response.set_cookie("secret", f"{items['secretId']}")
-        return response
+    if request.method == 'GET':
+        return render_template('index.html')
     else:
-        return f"Login Failed :("
+        username = request.form['username']
+        password = request.form['password']
+
+        items = getUserItems(username)
+        if username == items['username'] and password == items['password']:
+            token = generate_token(items['username'], items['secretId'])
+            response = make_response(redirect(url_for('forms')))
+            response.set_cookie("Authorization", f"Bearer {token}")
+            response.set_cookie("secret", f"{items['secretId']}")
+            return response
+        else:
+            return f"Login Failed :("
 
 
-@app.route('/forms', methods=['GET', 'POST'])
+@app.route('/forms', methods=['GET'])
 def forms():
 
     token = request.cookies.get("Authorization")
@@ -77,17 +81,7 @@ def forms():
                 userItems = getUserItems(username)
 
                 if request.method == 'POST':
-                    q1 = request.form['question1']
-
-                    questoes = {}
-
-                    for questao in request.form:
-                        print(f"questao {questao}")
-
-                    user_responses = {
-                        f"{username}": {
-                        }
-                    }
+                    return "Respostas enviadas :)"
                 elif request.method == 'GET':
                     return render_template('forms.html')
                 else:
@@ -98,6 +92,17 @@ def forms():
             abort(401, description="Token inválido. Faça login novamente.")
     else:
         abort(401, description="Token não fornecido. Faça login primeiro.")
+
+
+@app.route('/submit', methods=['POST'])
+def submit():
+    count = 0
+    userResp = {}
+    while count < 3:
+        userResp[f"questao{count}"] = request.form.get(f"nivel{count}")
+        count = count +1
+    print(f"user resp = {userResp}")
+    return "Request Submited :)"
 
 @app.route('/register', methods=['GET'])
 def register():

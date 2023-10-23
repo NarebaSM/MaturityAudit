@@ -8,19 +8,56 @@
 <body>
     <h1>Questionário: Auditoria em Datacenter</h1>
     <div class="center">
-        <form>
+        <form action="/submit" method="post">
             <table>
                 <tr>
                     <th>Pergunta</th>
                     <td></td>
                     <th>Nível</th>
                 </tr>
-                <!-- Adicione mais perguntas e respostas aqui, se necessário -->
+                <!-- Pergunta 1 -->
                 <tr>
                     <td>O que é HTML?</td>
                     <td></td>
                     <td class="level">
                         <span class="rating">
+                            <!-- Adicionei o atributo 'name' para identificação no lado do servidor -->
+                            <span>
+                                <input type="radio" name="nivel0" value="1" id="nivel0_1">
+                                <label for="nivel0_1"></label>
+                                <span class="level-number">1</span>
+                            </span>
+                            <span>
+                                <input type="radio" name="nivel0" value="2" id="nivel0_2">
+                                <label for="nivel0_2"></label>
+                                <span class="level-number">2</span>
+                            </span>
+                            <span>
+                                <input type="radio" name="nivel0" value="3" id="nivel0_3">
+                                <label for="nivel0_3"></label>
+                                <span class="level-number">3</span>
+                            </span>
+                            <span>
+                                <input type="radio" name="nivel0" value="4" id="nivel0_4">
+                                <label for="nivel0_4"></label>
+                                <span class="level-number">4</span>
+                            </span>
+                            <span>
+                                <input type="radio" name="nivel0" value="5" id="nivel0_5">
+                                <label for="nivel0_5"></label>
+                                <span class="level-number">5</span>
+                            </span>
+                        </span>
+                    </td>
+                </tr>
+                <!-- Pergunta 2 -->
+                <tr>
+                    <td>Qual é a importância do CSS?</td>
+                    <td></td>
+                    <td class="level">
+                        <span class="rating">
+                            <!-- Adicionei o atributo 'name' para identificação no lado do servidor -->
+                            <!-- Substitua 'nivel2' pelo nome desejado para a segunda pergunta -->
                             <span>
                                 <input type="radio" name="nivel1" value="1" id="nivel1_1">
                                 <label for="nivel1_1"></label>
@@ -44,6 +81,42 @@
                             <span>
                                 <input type="radio" name="nivel1" value="5" id="nivel1_5">
                                 <label for="nivel1_5"></label>
+                                <span class="level-number">5</span>
+                            </span>
+                        </span>
+                    </td>
+                </tr>
+                <!-- Pergunta 3 -->
+                <tr>
+                    <td>Explique o que é JavaScript.</td>
+                    <td></td>
+                    <td class="level">
+                        <span class="rating">
+                            <!-- Adicionei o atributo 'name' para identificação no lado do servidor -->
+                            <!-- Substitua 'nivel3' pelo nome desejado para a terceira pergunta -->
+                            <span>
+                                <input type="radio" name="nivel2" value="1" id="nivel2_1">
+                                <label for="nivel2_1"></label>
+                                <span class="level-number">1</span>
+                            </span>
+                            <span>
+                                <input type="radio" name="nivel2" value="2" id="nivel2_2">
+                                <label for="nivel2_2"></label>
+                                <span class="level-number">2</span>
+                            </span>
+                            <span>
+                                <input type="radio" name="nivel2" value="3" id="nivel2_3">
+                                <label for="nivel2_3"></label>
+                                <span class="level-number">3</span>
+                            </span>
+                            <span>
+                                <input type="radio" name="nivel2" value="4" id="nivel2_4">
+                                <label for="nivel2_4"></label>
+                                <span class="level-number">4</span>
+                            </span>
+                            <span>
+                                <input type="radio" name="nivel2" value="5" id="nivel2_5">
+                                <label for="nivel2_5"></label>
                                 <span class="level-number">5</span>
                             </span>
                         </span>
