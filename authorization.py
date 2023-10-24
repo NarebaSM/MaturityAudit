@@ -28,19 +28,23 @@ def generate_secret_key(username, password):
 
 def getUserItems(username):
     with open('pass.json', 'r') as a:
+        print(f"username = {username}")
         pass_data = json.load(a)
-        for users in pass_data:
-            if users['username'] == username:
-                return users
-            else:
-                return None
+        validate = "no"
+        for user in pass_data:
+            print(f"user = {user}")
+            if user['username'] == username:
+                validate = "yes"
+                return user
+        if validate == "no":
+            print("validate no")
+            return None
 
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-
     return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -51,16 +55,22 @@ def login():
     else:
         username = request.form['username']
         password = request.form['password']
+        print(f"username = {username} password {password}")
 
         items = getUserItems(username)
-        if username == items['username'] and password == items['password']:
-            token = generate_token(items['username'], items['secretId'])
-            response = make_response(redirect(url_for('forms')))
-            response.set_cookie("Authorization", f"Bearer {token}")
-            response.set_cookie("secret", f"{items['secretId']}")
-            return response
+        if not items:
+            error_message = "Credenciais Invalidas!"
+            return render_template('index.html', error=error_message)
         else:
-            return f"Login Failed :("
+            if username == items['username'] and password == items['password']:
+                token = generate_token(items['username'], items['secretId'])
+                response = make_response(redirect(url_for('forms')))
+                response.set_cookie("Authorization", f"Bearer {token}")
+                response.set_cookie("secret", f"{items['secretId']}")
+                return response
+            else:
+                error_message = "Credenciais Invalidas!"
+                return render_template('index.html', error=error_message)
 
 
 @app.route('/forms', methods=['GET'])
