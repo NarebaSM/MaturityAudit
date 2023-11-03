@@ -28,16 +28,13 @@ def generate_secret_key(username, password):
 
 def getUserItems(username):
     with open('pass.json', 'r') as a:
-        print(f"username = {username}")
         pass_data = json.load(a)
         validate = "no"
         for user in pass_data:
-            print(f"user = {user}")
             if user['username'] == username:
                 validate = "yes"
                 return user
         if validate == "no":
-            print("validate no")
             return None
 
 
@@ -55,7 +52,6 @@ def login():
     else:
         username = request.form['username']
         password = request.form['password']
-        print(f"username = {username} password {password}")
 
         items = getUserItems(username)
         if not items:
@@ -122,17 +118,19 @@ def register():
 def registerSub():
     usernameReg = request.form['username']
     passwordReg = request.form['password']
+    emailReg = request.form['email']
 
-    if usernameReg != "" and passwordReg != "" and usernameReg != None and passwordReg != None:
+    if usernameReg and passwordReg and emailReg:
         users_data = {}
         validation = "n"
-        with open('users.json', 'r') as users:
+        with open('pass.json', 'r') as users:
             users_data = json.load(users)
         for user in users_data:
-            if user['username'] == usernameReg:
+            if user['username'] == usernameReg or user['email'] == emailReg:
                 validation = "s"
         if validation == "s":
-            return 'Usuario ja registrado'
+            error_message = "Usuario ou Email ja registrado!"
+            return render_template('register.html', error=error_message)
         else:
             newUser = {"username": f"{usernameReg}"}
             users_data.append(newUser)
@@ -140,7 +138,7 @@ def registerSub():
             secret = generate_secret_key(usernameReg, passwordReg)
             with open('pass.json', 'r') as passArq:
                 pass_data = json.load(passArq)
-            newPass = {"username": f"{usernameReg}", "password": f"{passwordReg}", "secretId": f"{secret}"}
+            newPass = {"username": f"{usernameReg}", "email": f"{emailReg}", "password": f"{passwordReg}", "secretId": f"{secret}"}
             pass_data.append(newPass)
             with open('users.json', 'w') as a:
                 json.dump(users_data, a, indent=4)
@@ -149,5 +147,24 @@ def registerSub():
 
     return(f'User {usernameReg} registered!\nYou can access the plataform now!')
 
+@app.route('/users/list', methods=['GET'])
+def users():
+    auth = request.headers.get("Authorization")
+    if auth == "Bearer YWRtaW46U2VuaGFBZG1pbjEyMzQ1NiFAIyQl==":
+        onlyUser = []
+        with open('pass.json', 'r') as arq:
+            users = json.load(arq)
+            for user in users:
+                obj = {
+                    "username": f"{user['username']}",
+                    "email": f"{user['email']}"
+                }
+                onlyUser.append(obj)
+        print(f"only users = {onlyUser}")
+        return jsonify(onlyUser)
+    else:
+        abort(403, description="Unauthorized to user this!")
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="192.168.0.18", port=5000, debug=True)

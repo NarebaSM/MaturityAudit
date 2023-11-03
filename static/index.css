@@ -67,3 +67,15 @@ input[type="submit"]:hover {
     background-color: #4caf50;
     color: #fff;
 }
+
+*Err {
+    color: #ff0000;
+}
+
+#password-match {
+    color: #ff0000;
+}
+
+.error {
+    color: #ff0000;
+}
