@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, abort, make_response, Response
+from flask import Flask, render_template, flash, request, redirect, url_for, jsonify, abort, make_response, Response
 import json
 import jwt
 import datetime
@@ -39,6 +39,8 @@ def getUserItems(username):
 
 
 app = Flask(__name__)
+
+app.secret_key = 'achavedosucessoeosucesso'
 
 @app.route('/')
 def index():
@@ -144,8 +146,8 @@ def registerSub():
                 json.dump(users_data, a, indent=4)
             with open('pass.json', 'w') as wPass:
                 json.dump(pass_data, wPass, indent=4)
-
-    return(f'User {usernameReg} registered!\nYou can access the plataform now!')
+    success_message = "Register success"
+    return render_template('index.html', successReg=success_message)
 
 @app.route('/users/list', methods=['GET'])
 def users():
