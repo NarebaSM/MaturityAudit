@@ -1,4 +1,6 @@
 from flask import Flask, render_template, flash, request, redirect, url_for, jsonify, abort, make_response, Response
+from flask_cors import CORS
+import socket
 import json
 import jwt
 import datetime
@@ -38,7 +40,13 @@ def getUserItems(username):
             return None
 
 
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
+ip = s.getsockname()[0]
+s.close()
 app = Flask(__name__)
+CORS(app, supports_credentials=True, origins=['auditsegma5.ddns.net', '191.182.179.92:9876'], headers=['Content-Type', 'Authorization', 'secret'])
+app.config['SESSION_COOKIE_DOMAIN'] = 'auditsegma5.ddns.net'
 
 app.secret_key = 'achavedosucessoeosucesso'
 
@@ -63,8 +71,9 @@ def login():
             if username == items['username'] and password == items['password']:
                 token = generate_token(items['username'], items['secretId'])
                 response = make_response(redirect(url_for('forms')))
-                response.set_cookie("Authorization", f"Bearer {token}")
-                response.set_cookie("secret", f"{items['secretId']}")
+                response.set_cookie('Authorization', f'Bearer {token}')
+                response.set_cookie('secret', f"{items['secretId']}")
+                response.headers['Access-Control-Allow-Credentials'] = 'true'
                 return response
             else:
                 error_message = "Credenciais Invalidas!"
@@ -74,7 +83,7 @@ def login():
 @app.route('/forms', methods=['GET'])
 def forms():
 
-    token = request.cookies.get("Authorization")
+    token = request.cookies.get('Authorization')
 
     if token and token.startswith('Bearer'):
         token = token.split(' ')[1]
@@ -169,4 +178,4 @@ def users():
 
 
 if __name__ == '__main__':
-    app.run(host="192.168.0.18", port=5000, debug=True)
+    app.run(host=ip, port=9876, debug=True)
