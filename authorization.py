@@ -1,5 +1,8 @@
 from flask import Flask, render_template, flash, request, redirect, url_for, jsonify, abort, make_response, Response
 from flask_cors import CORS
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import socket
 import json
 import jwt
@@ -38,6 +41,10 @@ def getUserItems(username):
                 return user
         if validate == "no":
             return None
+
+def sendMail():
+    remetente = "no-reply.segma5@change.pass"
+
 
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -157,6 +164,10 @@ def registerSub():
                 json.dump(pass_data, wPass, indent=4)
     success_message = "Register success"
     return render_template('index.html', successReg=success_message)
+
+@app.route('/changePass', methods=['GET', 'POST'])
+def changePass():
+    return render_template('changePass.html')
 
 @app.route('/users/list', methods=['GET'])
 def users():
