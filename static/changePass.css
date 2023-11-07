@@ -49,33 +49,18 @@ input[type="submit"]:hover {
     background-color: #45a049;
 }
 
-.register-section {
-    margin-top: 16px;
-}
-
-#regButton {
-    display: inline-block;
-    background-color: #fff;
-    color: #4caf50;
-    text-decoration: none;
-    padding: 10px 20px;
-    border: 1px solid #4caf50;
-    border-radius: 4px;
-}
-
-#regButton:hover {
-    background-color: #4caf50;
-    color: #fff;
-}
-
 *Err {
     color: #ff0000;
 }
 
-#password-match {
+#emailErr {
     color: #ff0000;
 }
 
 .error {
     color: #ff0000;
+}
+
+.mailMessage {
+    color: #0000ff;
 }

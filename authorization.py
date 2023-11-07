@@ -42,15 +42,17 @@ def getUserItems(username):
         if validate == "no":
             return None
 
-def sendMail():
+def sendMail(email):
     remetente = "no-reply.segma5@change.pass"
+    destinatario = email
 
 
 
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(("8.8.8.8", 80))
-ip = s.getsockname()[0]
-s.close()
+
+# s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# s.connect(("8.8.8.8", 80))
+# ip = s.getsockname()[0]
+# s.close()
 app = Flask(__name__)
 CORS(app, supports_credentials=True, origins=['auditsegma5.ddns.net', '191.182.179.92:9876'], headers=['Content-Type', 'Authorization', 'secret'])
 app.config['SESSION_COOKIE_DOMAIN'] = 'auditsegma5.ddns.net'
@@ -150,16 +152,12 @@ def registerSub():
             error_message = "Usuario ou Email ja registrado!"
             return render_template('register.html', error=error_message)
         else:
-            newUser = {"username": f"{usernameReg}"}
-            users_data.append(newUser)
             pass_data = ""
             secret = generate_secret_key(usernameReg, passwordReg)
             with open('pass.json', 'r') as passArq:
                 pass_data = json.load(passArq)
             newPass = {"username": f"{usernameReg}", "email": f"{emailReg}", "password": f"{passwordReg}", "secretId": f"{secret}"}
             pass_data.append(newPass)
-            with open('users.json', 'w') as a:
-                json.dump(users_data, a, indent=4)
             with open('pass.json', 'w') as wPass:
                 json.dump(pass_data, wPass, indent=4)
     success_message = "Register success"
@@ -167,7 +165,24 @@ def registerSub():
 
 @app.route('/changePass', methods=['GET', 'POST'])
 def changePass():
-    return render_template('changePass.html')
+    if request.method == 'GET':
+        return render_template('changePass.html')
+    elif request.method == 'POST':
+        email = request.form['email']
+        print(f"email = {email}")
+        with open('pass.json', 'r') as arq:
+            users = json.load(arq)
+        for user in users:
+            print(f"user email = {user['email']}")
+            if user['email'] == email:
+                sendMail(email)
+                mailMessage = 'Password reset sent to your email.'
+                return render_template('changePass.html', mailMessage=mailMessage)
+            else:
+                return render_template('changePass.html', emailErr='Email não encontrado.')
+    else:
+        abort(404, description='Method not supportable')
+
 
 @app.route('/users/list', methods=['GET'])
 def users():
@@ -189,4 +204,4 @@ def users():
 
 
 if __name__ == '__main__':
-    app.run(host=ip, port=9876, debug=True)
+    app.run(host="127.0.0.1", port=9876, debug=True)

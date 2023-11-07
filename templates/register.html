@@ -19,15 +19,19 @@
 
             <label for="email">Email:</label>
             <div id="emailErr" style="color: red;"></div>
-            <input type="text" id="email" name="email" oninput="validaEmail()" required>
+            <input type="text" id="email" name="email" oninput="submitValidation()" required>
+
+            <label for="CNPJ">CNPJ:</label>
+            <div id="cnpjErr" style="color: red;"></div>
+            <input type="text" id="CNPJ" name="CNPJ" oninput="submitValidation()" required>
 
             <label for="password">Password:</label>
             <div id="passErr" style="color: red;"></div>
-            <input type="password" id="password" name="password" oninput="checkPasswordStrength()" required>
+            <input type="password" id="password" name="password" oninput="submitValidation()" required>
             <div id="password-strength"></div>
 
             <label for="passwordConfirm">Confirm Password:</label>
-            <input type="password" id="passwordConfirm" name="passwordConfirm" oninput="checkPasswordMatch()" required>
+            <input type="password" id="passwordConfirm" name="passwordConfirm" oninput="submitValidation()" required>
             <div id="password-match"></div>
 
             <p><input type="submit" value="Register" id="submitButton"><p/>

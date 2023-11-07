@@ -98,3 +98,15 @@ input[type="submit"]:hover {
 .error {
     color: #ff0000;
 }
+
+.Weak {
+    color: #ff0000;
+}
+
+.Medium {
+    color: #ff6600;
+}
+
+.Strong {
+    color: #00ff00;
+}

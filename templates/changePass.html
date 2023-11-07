@@ -9,12 +9,19 @@
 <body>
     <div class="container">
         <h2>Change your password</h2>
-        <form method="post" action="{{ url_for('registerSub') }}">
+        {% if emailErr %}
+            <p class="error">{{ emailErr }}</p>
+        {% endif %}
+        <form method="post" action="{{ url_for('changePass') }}">
             <label for="email">email:</label>
             <div id="emailErr"></div>
             <input type="text" id="email" name="email" oninput="validaEmail()" required>
 
             <p><input type="submit" value="sendEmail" id="submitEmail"><p/>
+
+            {% if mailMessage %}
+                <p class="mailMessage">{{ mailMessage }}</p>
+            {% endif %}
         </form>
     </div>
 
