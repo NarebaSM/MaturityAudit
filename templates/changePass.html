@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='changePass.css') }}">
+    <title>Change Password Page</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Change your password</h2>
+        {% if emailErr %}
+            <p class="error">{{ emailErr }}</p>
+        {% endif %}
+        <form method="post" action="{{ url_for('changePass') }}">
+            <label for="email">email:</label>
+            <div id="emailErr"></div>
+            <input type="text" id="email" name="email" oninput="validaEmail()" required>
+
+            <p><input type="submit" value="sendEmail" id="submitEmail"><p/>
+
+            {% if mailMessage %}
+                <p class="mailMessage">{{ mailMessage }}</p>
+            {% endif %}
+        </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='sendMail.js') }}"></script>
+
+</body>
+</html>

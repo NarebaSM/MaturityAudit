@@ -50,11 +50,11 @@ form {
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.rating label[for="nivel1_1"] { background-color: #ff0000; }
-.rating label[for="nivel1_2"] { background-color: #ff6600; }
-.rating label[for="nivel1_3"] { background-color: #ffcc00; }
-.rating label[for="nivel1_4"] { background-color: #66ff33; }
-.rating label[for="nivel1_5"] { background-color: #00ff00; }
+.rating label[for$="_1"] { background-color: #ff0000; }
+.rating label[for$="_2"] { background-color: #ff6600; }
+.rating label[for$="_3"] { background-color: #ffcc00; }
+.rating label[for$="_4"] { background-color: #66ff33; }
+.rating label[for$="_5"] { background-color: #00ff00; }
 
 .rating input[type="radio"]:checked + label::before {
     content: "✔";

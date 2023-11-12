@@ -3,18 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
     <title>Register Page</title>
 </head>
 <body>
-    <h2>Register</h2>
-    <form method="post" action="{{ url_for('registerSub') }}">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br>
+    <div class="container">
+        <h2>Register</h2>
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+        <form method="post" action="{{ url_for('registerSub') }}">
+            <label for="username">Username:</label>
+            <div id="userErr" style="color: red;"></div>
+            <input type="text" id="username" name="username" required>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br>
+            <label for="email">Email:</label>
+            <div id="emailErr" style="color: red;"></div>
+            <input type="text" id="email" name="email" oninput="submitValidation()" required>
 
-        <input type="submit" value="Register">
-    </form>
+            <label for="CNPJ">CNPJ:</label>
+            <div id="cnpjErr" style="color: red;"></div>
+            <input type="text" id="CNPJ" name="CNPJ" oninput="submitValidation()" required>
+
+            <label for="password">Password:</label>
+            <div id="passErr" style="color: red;"></div>
+            <input type="password" id="password" name="password" oninput="submitValidation()" required>
+            <div id="password-strength"></div>
+
+            <label for="passwordConfirm">Confirm Password:</label>
+            <input type="password" id="passwordConfirm" name="passwordConfirm" oninput="submitValidation()" required>
+            <div id="password-match"></div>
+
+            <p><input type="submit" value="Register" id="submitButton"><p/>
+        </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='register.js') }}"></script>
+
 </body>
 </html>

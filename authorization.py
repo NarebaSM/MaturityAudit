@@ -1,4 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, abort, make_response, Response
+from flask import Flask, render_template, flash, request, redirect, url_for, jsonify, abort, make_response, Response
+from flask_cors import CORS
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import socket
 import json
 import jwt
 import datetime
@@ -29,40 +34,65 @@ def generate_secret_key(username, password):
 def getUserItems(username):
     with open('pass.json', 'r') as a:
         pass_data = json.load(a)
-        for users in pass_data:
-            if users['username'] == username:
-                return users
-            else:
-                return None
+        validate = "no"
+        for user in pass_data:
+            if user['username'] == username:
+                validate = "yes"
+                return user
+        if validate == "no":
+            return None
+
+def sendMail(email):
+    remetente = "no-reply.segma5@change.pass"
+    destinatario = email
 
 
+
+
+# s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# s.connect(("8.8.8.8", 80))
+# ip = s.getsockname()[0]
+# s.close()
 app = Flask(__name__)
+CORS(app, supports_credentials=True, origins=['auditsegma5.ddns.net', '191.182.179.92:9876'], headers=['Content-Type', 'Authorization', 'secret'])
+app.config['SESSION_COOKIE_DOMAIN'] = 'auditsegma5.ddns.net'
+
+app.secret_key = 'achavedosucessoeosucesso'
 
 @app.route('/')
 def index():
-
     return render_template('index.html')
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    username = request.form['username']
-    password = request.form['password']
 
-    items = getUserItems(username)
-    if username == items['username'] and password == items['password']:
-        token = generate_token(items['username'], items['secretId'])
-        response = make_response(redirect(url_for('forms')))
-        response.set_cookie("Authorization", f"Bearer {token}")
-        response.set_cookie("secret", f"{items['secretId']}")
-        return response
+    if request.method == 'GET':
+        return render_template('index.html')
     else:
-        return f"Login Failed :("
+        username = request.form['username']
+        password = request.form['password']
+
+        items = getUserItems(username)
+        if not items:
+            error_message = "Credenciais Invalidas!"
+            return render_template('index.html', error=error_message)
+        else:
+            if username == items['username'] and password == items['password']:
+                token = generate_token(items['username'], items['secretId'])
+                response = make_response(redirect(url_for('forms')))
+                response.set_cookie('Authorization', f'Bearer {token}')
+                response.set_cookie('secret', f"{items['secretId']}")
+                response.headers['Access-Control-Allow-Credentials'] = 'true'
+                return response
+            else:
+                error_message = "Credenciais Invalidas!"
+                return render_template('index.html', error=error_message)
 
 
-@app.route('/forms', methods=['GET', 'POST'])
+@app.route('/forms', methods=['GET'])
 def forms():
 
-    token = request.cookies.get("Authorization")
+    token = request.cookies.get('Authorization')
 
     if token and token.startswith('Bearer'):
         token = token.split(' ')[1]
@@ -77,17 +107,7 @@ def forms():
                 userItems = getUserItems(username)
 
                 if request.method == 'POST':
-                    q1 = request.form['question1']
-
-                    questoes = {}
-
-                    for questao in request.form:
-                        print(f"questao {questao}")
-
-                    user_responses = {
-                        f"{username}": {
-                        }
-                    }
+                    return "Respostas enviadas :)"
                 elif request.method == 'GET':
                     return render_template('forms.html')
                 else:
@@ -99,6 +119,17 @@ def forms():
     else:
         abort(401, description="Token não fornecido. Faça login primeiro.")
 
+
+@app.route('/submit', methods=['POST'])
+def submit():
+    count = 0
+    userResp = {}
+    while count < 3:
+        userResp[f"questao{count}"] = request.form.get(f"nivel{count}")
+        count = count +1
+    print(f"user resp = {userResp}")
+    return "Request Submited :)"
+
 @app.route('/register', methods=['GET'])
 def register():
     return render_template('register.html')
@@ -107,32 +138,70 @@ def register():
 def registerSub():
     usernameReg = request.form['username']
     passwordReg = request.form['password']
+    emailReg = request.form['email']
 
-    if usernameReg != "" and passwordReg != "" and usernameReg != None and passwordReg != None:
+    if usernameReg and passwordReg and emailReg:
         users_data = {}
         validation = "n"
-        with open('users.json', 'r') as users:
+        with open('pass.json', 'r') as users:
             users_data = json.load(users)
         for user in users_data:
-            if user['username'] == usernameReg:
+            if user['username'] == usernameReg or user['email'] == emailReg:
                 validation = "s"
         if validation == "s":
-            return 'Usuario ja registrado'
+            error_message = "Usuario ou Email ja registrado!"
+            return render_template('register.html', error=error_message)
         else:
-            newUser = {"username": f"{usernameReg}"}
-            users_data.append(newUser)
             pass_data = ""
             secret = generate_secret_key(usernameReg, passwordReg)
             with open('pass.json', 'r') as passArq:
                 pass_data = json.load(passArq)
-            newPass = {"username": f"{usernameReg}", "password": f"{passwordReg}", "secretId": f"{secret}"}
+            newPass = {"username": f"{usernameReg}", "email": f"{emailReg}", "password": f"{passwordReg}", "secretId": f"{secret}"}
             pass_data.append(newPass)
-            with open('users.json', 'w') as a:
-                json.dump(users_data, a, indent=4)
             with open('pass.json', 'w') as wPass:
                 json.dump(pass_data, wPass, indent=4)
+    success_message = "Register success"
+    return render_template('index.html', successReg=success_message)
 
-    return(f'User {usernameReg} registered!\nYou can access the plataform now!')
+@app.route('/changePass', methods=['GET', 'POST'])
+def changePass():
+    if request.method == 'GET':
+        return render_template('changePass.html')
+    elif request.method == 'POST':
+        email = request.form['email']
+        print(f"email = {email}")
+        with open('pass.json', 'r') as arq:
+            users = json.load(arq)
+        for user in users:
+            print(f"user email = {user['email']}")
+            if user['email'] == email:
+                sendMail(email)
+                mailMessage = 'Password reset sent to your email.'
+                return render_template('changePass.html', mailMessage=mailMessage)
+            else:
+                return render_template('changePass.html', emailErr='Email não encontrado.')
+    else:
+        abort(404, description='Method not supportable')
+
+
+@app.route('/users/list', methods=['GET'])
+def users():
+    auth = request.headers.get("Authorization")
+    if auth == "Bearer YWRtaW46U2VuaGFBZG1pbjEyMzQ1NiFAIyQl==":
+        onlyUser = []
+        with open('pass.json', 'r') as arq:
+            users = json.load(arq)
+            for user in users:
+                obj = {
+                    "username": f"{user['username']}",
+                    "email": f"{user['email']}"
+                }
+                onlyUser.append(obj)
+        print(f"only users = {onlyUser}")
+        return jsonify(onlyUser)
+    else:
+        abort(403, description="Unauthorized to user this!")
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="127.0.0.1", port=9876, debug=True)

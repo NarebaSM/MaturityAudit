@@ -3,20 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
     <title>Login Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
 </head>
 <body>
-    <h2>Login</h2>
-    <form method="post" action="{{ url_for('login') }}">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br>
+    {% if successReg %}
+        <script src="{{ url_for('static', filename='successRegAlert.js') }}"></script>
+    {% endif %}
+    <div class="container">
+        <h2>Login</h2>
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        {% if success %}
+            <p class="success">{{ success }}</p>
+        {% endif %}
+        <form method="post" action="{{ url_for('login') }}">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
 
-        <input type="submit" value="Login">
-    </form>
+            <input type="submit" value="Login">
+        </form>
 
-    <a href="{{ url_for('register') }}">Register</a>
+        <div class="register-section">
+            <a id="regButton" href="{{ url_for('register') }}">Register</a>
+            <a id="changePassButton" href="{{ url_for('changePass') }}">Forget Password</a>
+        </div>
+    </div>
 </body>
 </html>
