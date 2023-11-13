@@ -9,6 +9,7 @@ import jwt
 import datetime
 import hashlib
 import base64
+import re
 
 
 def generate_token(username, secret):
@@ -36,7 +37,7 @@ def getUserItems(username):
         pass_data = json.load(a)
         validate = "no"
         for user in pass_data:
-            if user['username'] == username:
+            if user['username'] == username or user['email'] == username:
                 validate = "yes"
                 return user
         if validate == "no":
@@ -69,7 +70,7 @@ def login():
     if request.method == 'GET':
         return render_template('index.html')
     else:
-        username = request.form['username']
+        username = request.form['username'].lower()
         password = request.form['password']
 
         items = getUserItems(username)
@@ -77,10 +78,13 @@ def login():
             error_message = "Credenciais Invalidas!"
             return render_template('index.html', error=error_message)
         else:
-            if username == items['username'] and password == items['password']:
+            user = items['username'].lower()
+            mail = items['email'].lower()
+            if (username == user or username == mail) and password == items['password']:
                 token = generate_token(items['username'], items['secretId'])
                 response = make_response(redirect(url_for('forms')))
                 response.set_cookie('Authorization', f'Bearer {token}')
+                response.set_cookie('username', f'{username}')
                 response.set_cookie('secret', f"{items['secretId']}")
                 response.headers['Access-Control-Allow-Credentials'] = 'true'
                 return response
@@ -106,8 +110,13 @@ def forms():
 
                 userItems = getUserItems(username)
 
+                print(f"user items payload = {userItems}")
+
                 if request.method == 'POST':
-                    return "Respostas enviadas :)"
+                    usr = request.cookies.get('username')
+                    response = make_response(redirect(url_for('submit')))
+                    response.set_cookie('username', f"{usr}")
+                    return response
                 elif request.method == 'GET':
                     return render_template('forms.html')
                 else:
@@ -124,10 +133,26 @@ def forms():
 def submit():
     count = 0
     userResp = {}
-    while count < 3:
+    while count < 19:
         userResp[f"questao{count}"] = request.form.get(f"nivel{count}")
         count = count +1
-    print(f"user resp = {userResp}")
+    respostas = []
+    with open('responses.json', 'r') as resps:
+        respostas = json.load(resps)
+
+    print(f"respostas = {respostas}")
+    usr = request.cookies.get('username')
+
+    print(f"respostas gsm = {respostas[f'{usr}']}")
+
+    oldResp = respostas[f'{usr}']
+    print(f"old resp = {oldResp}")
+    oldResp.append(userResp)
+    print(f"append resp = {oldResp}")
+    respostas[f'{usr}'] = oldResp
+    with open('responses.json', 'w') as wArq:
+        json.dump(respostas, wArq, indent=4)
+
     return "Request Submited :)"
 
 @app.route('/register', methods=['GET'])
@@ -136,9 +161,11 @@ def register():
 
 @app.route('/registerSub', methods=['POST'])
 def registerSub():
-    usernameReg = request.form['username']
+    usernameReg = request.form['username'].lower()
     passwordReg = request.form['password']
     emailReg = request.form['email']
+    CNPJReg = request.form['CNPJ']
+    CNPJReg = re.sub(r'\D', '', CNPJReg)
 
     if usernameReg and passwordReg and emailReg:
         users_data = {}
@@ -146,7 +173,7 @@ def registerSub():
         with open('pass.json', 'r') as users:
             users_data = json.load(users)
         for user in users_data:
-            if user['username'] == usernameReg or user['email'] == emailReg:
+            if user['username'].lower() == usernameReg.lower() or user['email'].lower() == emailReg.lower():
                 validation = "s"
         if validation == "s":
             error_message = "Usuario ou Email ja registrado!"
@@ -156,7 +183,7 @@ def registerSub():
             secret = generate_secret_key(usernameReg, passwordReg)
             with open('pass.json', 'r') as passArq:
                 pass_data = json.load(passArq)
-            newPass = {"username": f"{usernameReg}", "email": f"{emailReg}", "password": f"{passwordReg}", "secretId": f"{secret}"}
+            newPass = {"username": f"{usernameReg}", "email": f"{emailReg}", "CNPJ": f"{CNPJReg}", "password": f"{passwordReg}", "secretId": f"{secret}"}
             pass_data.append(newPass)
             with open('pass.json', 'w') as wPass:
                 json.dump(pass_data, wPass, indent=4)
