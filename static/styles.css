@@ -1,36 +1,56 @@
 body {
-    background-color: rgb(255, 255, 255);
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 600px;
+    text-align: center;
 }
 
 h1 {
-    text-align: center;
+    color: #333;
 }
 
 table {
-    margin: 0 auto;
-    border-collapse: separate;
-    border-spacing: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border: 2px solid #ddd; /* Adicionado */
+    border-radius: 8px; /* Adicionado */
 }
 
 th, td {
-    padding: 10px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    text-align: left;
 }
 
-.center {
+.level {
     text-align: center;
 }
 
-form {
-    background-color: rgba(255, 255, 255, 0.6);
-    padding: 10px;
+.rating {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
-.rating {
-    font-size: 12px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.rating span {
+    position: relative;
+}
+
+.rating input[type="radio"] {
+    display: none;
 }
 
 .rating input[type="radio"] {
@@ -56,13 +76,23 @@ form {
 .rating label[for$="_4"] { background-color: #66ff33; }
 .rating label[for$="_5"] { background-color: #00ff00; }
 
-.rating input[type="radio"]:checked + label::before {
-    content: "✔";
-    color: #009900;
+.rating input[type="radio"]:checked + label {
+    background-color: #3498db;
+    color: #fff;
 }
 
-.level-number {
-    font-size: 12px;
-    margin-top: 3px;
+input[type="submit"] {
+    background-color: #4caf50;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    transition: background-color 0.3s; /* Adicionado para suavizar a transição de cor */
 }
 
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
