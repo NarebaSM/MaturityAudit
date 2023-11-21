@@ -49,11 +49,14 @@ def sendMail(email):
 
 
 
-
-# s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-# s.connect(("8.8.8.8", 80))
-# ip = s.getsockname()[0]
-# s.close()
+try:
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip = s.getsockname()[0]
+    s.close()
+except:
+    ip = "127.0.0.1"
+    print(f"!!!error connecting to internet, setting ip localhost!!!")
 app = Flask(__name__)
 CORS(app, supports_credentials=True, origins=['auditsegma5.ddns.net', '191.182.179.92:9876'], headers=['Content-Type', 'Authorization', 'secret'])
 app.config['SESSION_COOKIE_DOMAIN'] = 'auditsegma5.ddns.net'
@@ -231,4 +234,4 @@ def users():
 
 
 if __name__ == '__main__':
-    app.run(host="127.0.0.1", port=9876, debug=True)
+    app.run(host=ip, port=9876, debug=True)

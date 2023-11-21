@@ -79,3 +79,28 @@ form {
     margin-top: 5px;
     font-weight: bold;
 }
+
+.Pessimo {
+    display: flex;
+    margin-top: 5px;
+}
+
+.Ruim {
+    display: flex;
+    margin-top: 5px;
+}
+
+.Medio {
+    display: flex;
+    margin-top: 5px;
+}
+
+.Bom {
+    display: flex;
+    margin-top: 5px;
+}
+
+.Excelente {
+    display: flex;
+    margin-top: 5px;
+}
