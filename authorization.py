@@ -148,7 +148,7 @@ def forms():
 @app.route('/submit', methods=['POST'])
 def submit():
     respostas = []
-    for i in range(31):
+    for i in range(29):
         resposta = request.form.get(f'nivel{i}')
         respostas.append(resposta)
 

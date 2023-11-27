@@ -3,28 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Auditoria em Datacenter</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-<h1>Questionário: Auditoria em Datacenter</h1>
-<div class="center">
-    <form action="/submit" method="post">
-        <input type="hidden" name="usr" value="{{ usr }}">
-        <table>
-            <tr>
-                <th>Pergunta</th>
-                <th>Nível</th>
-            </tr>
-            <tr>
-                <td>A política de backup está documentada e disponível para todos os funcionários relevantes?</td>
-                <td></td>
-                <td class="level">
+    <h1>Questionário: Auditoria em Datacenter</h1>
+    <div class="center">
+        <form id="auditForm" onsubmit="return validarFormulario()" action="/submit" method="post">
+            <input type="hidden" name="usr" value="{{ usr }}">
+            <table>
+                <tr>
+                    <th bgcolor="yellow">TODAS as perguntas deste teste de maturidade para uma auditoria em data center foram baseadas na ISO27002</th>
+                </tr>
+
+            </table>
+            <br><br><br>
+            <table>
+                <tr>
+                    <th>Pergunta</th>
+                    <th>Nível</th>
+                </tr>
+            </table>
+            <br><br><br>
+            <table>
+                <th>Backup</th>
+            </table>
+            <table>
+                <tr>
+                    <td>(Política de Backup - A.12.3.1) A política de backup está documentada e disponível para todos os funcionários relevantes?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel1" value="1" id="nivel1_1">
                                 <label for="nivel1_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -52,17 +65,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>A classificação da informação é feita antes da execução do processo de backup?</td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Classificação da Informação - A.8.2.1) A classificação da informação é feita antes da execução do processo de backup?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel2" value="1" id="nivel2_1">
                                 <label for="nivel2_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -90,19 +103,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Os dados são classificados de acordo com sua importância e sensibilidade, e os procedimentos de
-                    backup são feitos de acordo com essas classificações?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Classificação da Informação - A.8.2.1) Os dados são classificados de acordo com sua importância e sensibilidade, e os procedimentos de backup são feitos de acordo com essas classificações?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel3" value="1" id="nivel3_1">
                                 <label for="nivel3_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -130,19 +141,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Os sistemas de resfriamento e ventilação do data center são eficazes e mantêm as temperaturas dentro
-                    dos limites aceitáveis?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Integridade dos Dados de Backup - A.12.3.2) Os dados de backup são verificados de tempos em tempos quanto à sua integridade?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel4" value="1" id="nivel4_1">
                                 <label for="nivel4_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -170,17 +179,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Os dados de backup são verificados de tempos em tempos quanto à sua integridade?</td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Controles de Acesso - A.9.1.2) Os acessos aos sistemas de backup são restritos apenas a usuários autorizados?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel5" value="1" id="nivel5_1">
                                 <label for="nivel5_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -208,17 +217,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Os acessos aos sistemas de backup são restritos apenas a usuários autorizados?</td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Controles de Acesso - A.9.1.2) São utilizados controles de autenticação para garantir que apenas pessoal autorizado tenha acesso aos dados de backup?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel6" value="1" id="nivel6_1">
                                 <label for="nivel6_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -246,19 +255,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>São utilizados controles de autenticação para garantir que apenas pessoal autorizado tenha acesso
-                    aos dados de backup?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Monitoramento e Análise - A.12.4.1) Existe um sistema de monitoramento para detectar eventos não autorizados ou falhas nos processos de backup?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel7" value="1" id="nivel7_1">
                                 <label for="nivel7_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -286,216 +293,194 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Existe um sistema de monitoramento para detectar eventos não autorizados ou falhas nos processos de
-                    backup?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+            </table>
+            <br><br><br>
+            <table>
+                <th>Redundância</th>
+            </table>
+            <table>
+                <tr>
+                    <td>(Planejamento de Continuidade de Negócios - A.14.1.3) Existe um plano de continuidade de negócios que aborda especificamente a redundância no data center?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel8" value="1" id="nivel8_1">
                                 <label for="nivel8_1"></label>
-                                <div level="Péssimo">Péssimo</div>
-
+                                <div level="Pessimo">Pessimo</div>
                             </span>
                             <span>
                                 <input type="radio" name="nivel8" value="2" id="nivel8_2">
                                 <label for="nivel8_2"></label>
                                 <div level="Ruim">Ruim</div>
-
                             </span>
                             <span>
                                 <input type="radio" name="nivel8" value="3" id="nivel8_3">
                                 <label for="nivel8_3"></label>
                                 <div level="Medio">Medio</div>
-
                             </span>
                             <span>
                                 <input type="radio" name="nivel8" value="4" id="nivel8_4">
                                 <label for="nivel8_4"></label>
                                 <div level="Bom">Bom</div>
-
                             </span>
                             <span>
                                 <input type="radio" name="nivel8" value="5" id="nivel8_5">
                                 <label for="nivel8_5"></label>
                                 <div level="Excelente">Excelente</div>
-
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Existe um plano de continuidade de negócios que aborda especificamente a redundância no data
-                    center?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Testes de Redundância - A.17.2.1) Os mecanismos de redundância são testados com frequência para garantir sua eficácia?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel9" value="1" id="nivel9_1">
                                 <label for="nivel9_1"></label>
-                                <div level="Péssimo">Péssimo</div>
-
+                                <div level="Pessimo">Pessimo</div>
                             </span>
                             <span>
                                 <input type="radio" name="nivel9" value="2" id="nivel9_2">
                                 <label for="nivel9_2"></label>
                                 <div level="Ruim">Ruim</div>
-
                             </span>
                             <span>
                                 <input type="radio" name="nivel9" value="3" id="nivel9_3">
                                 <label for="nivel9_3"></label>
                                 <div level="Medio">Medio</div>
-
                             </span>
                             <span>
                                 <input type="radio" name="nivel9" value="4" id="nivel9_4">
                                 <label for="nivel9_4"></label>
                                 <div level="Bom">Bom</div>
-
                             </span>
                             <span>
                                 <input type="radio" name="nivel9" value="5" id="nivel9_5">
                                 <label for="nivel9_5"></label>
                                 <div level="Excelente">Excelente</div>
-
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Os mecanismos de redundância são testados com frequência para garantir sua eficácia?</td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Monitoramento de Redundância - A.16.1.5) Há um sistema de monitoramento para identificar falhas e garantir que a redundância seja ativada automaticamente se necessário?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel10" value="1" id="nivel10_1">
                                 <label for="nivel10_1"></label>
-                                <div level="Péssimo">Péssimo</div>
-
+                                <div level="Pessimo">Pessimo</div>
                             </span>
                             <span>
                                 <input type="radio" name="nivel10" value="2" id="nivel10_2">
                                 <label for="nivel10_2"></label>
                                 <div level="Ruim">Ruim</div>
-
                             </span>
                             <span>
                                 <input type="radio" name="nivel10" value="3" id="nivel10_3">
                                 <label for="nivel10_3"></label>
                                 <div level="Medio">Medio</div>
-
                             </span>
                             <span>
                                 <input type="radio" name="nivel10" value="4" id="nivel10_4">
                                 <label for="nivel10_4"></label>
                                 <div level="Bom">Bom</div>
-
                             </span>
                             <span>
                                 <input type="radio" name="nivel10" value="5" id="nivel10_5">
                                 <label for="nivel10_5"></label>
                                 <div level="Excelente">Excelente</div>
-
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Há um sistema de monitoramento para identificar falhas e garantir que a redundância seja ativada
-                    automaticamente se necessário?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Proteção contra Falhas - A.12.2.1) São planejados controles para verificar o risco de falhas em componentes críticos, como servidores, switches e sistemas de armazenamento?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel11" value="1" id="nivel11_1">
                                 <label for="nivel11_1"></label>
-                                <div level="Péssimo">Péssimo</div>
-
+                                <div level="Pessimo">Pessimo</div>
                             </span>
                             <span>
                                 <input type="radio" name="nivel11" value="2" id="nivel11_2">
                                 <label for="nivel11_2"></label>
                                 <div level="Ruim">Ruim</div>
-
                             </span>
                             <span>
                                 <input type="radio" name="nivel11" value="3" id="nivel11_3">
                                 <label for="nivel11_3"></label>
                                 <div level="Medio">Medio</div>
-
                             </span>
                             <span>
                                 <input type="radio" name="nivel11" value="4" id="nivel11_4">
                                 <label for="nivel11_4"></label>
                                 <div level="Bom">Bom</div>
-
                             </span>
                             <span>
                                 <input type="radio" name="nivel11" value="5" id="nivel11_5">
                                 <label for="nivel11_5"></label>
                                 <div level="Excelente">Excelente</div>
-
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>São planejados controles para verificar o risco de falhas em componentes críticos, como servidores,
-                    switches e sistemas de armazenamento?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Proteção contra Falhas - A.12.2.1) Há redundância eficaz para garantir a disponibilidade dos serviços em caso de falha de hardware?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel12" value="1" id="nivel12_1">
                                 <label for="nivel12_1"></label>
-                                <div level="Péssimo">Péssimo</div>
-
+                                <div level="Pessimo">Pessimo</div>
                             </span>
                             <span>
                                 <input type="radio" name="nivel12" value="2" id="nivel12_2">
                                 <label for="nivel12_2"></label>
                                 <div level="Ruim">Ruim</div>
-
                             </span>
                             <span>
                                 <input type="radio" name="nivel12" value="3" id="nivel12_3">
                                 <label for="nivel12_3"></label>
                                 <div level="Medio">Medio</div>
-
                             </span>
                             <span>
                                 <input type="radio" name="nivel12" value="4" id="nivel12_4">
                                 <label for="nivel12_4"></label>
                                 <div level="Bom">Bom</div>
-
                             </span>
                             <span>
                                 <input type="radio" name="nivel12" value="5" id="nivel12_5">
                                 <label for="nivel12_5"></label>
                                 <div level="Excelente">Excelente</div>
-
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Há redundância eficaz para garantir a disponibilidade dos serviços em caso de falha de hardware?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+            </table>
+            <br><br><br>
+            <table>
+                <th>Plano de Continuidade</th>
+            </table>
+            <table>
+                <tr>
+                    <td>(Desenvolvimento do Plano de Continuidade de Negócios - A.14.1.1) Existe um plano de continuidade de negócios específico para o data center?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel13" value="1" id="nivel13_1">
                                 <label for="nivel13_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -523,19 +508,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Todos os funcionários que trabalham no data center passaram por verificações de antecedentes e
-                    treinamento em segurança?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Desenvolvimento do Plano de Continuidade de Negócios - A.14.1.1) O plano está alinhado com os objetivos da organização e documenta procedimentos para manter operações críticas em períodos adversos?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel14" value="1" id="nivel14_1">
                                 <label for="nivel14_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -563,17 +546,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Existe um plano de continuidade de negócios específico para o data center?</td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Testes e Revisões do Plano - A.17.1.3) O plano de contingência do data center é testado com frequência?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel15" value="1" id="nivel15_1">
                                 <label for="nivel15_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -601,19 +584,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>O plano está alinhado com os objetivos da organização e documenta procedimentos para manter
-                    operações críticas em períodos adversos?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Testes e Revisões do Plano - A.17.1.3) São conduzidas revisões periódicas para aprendizados de incidentes anteriores e atualizar o plano se necessário?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel16" value="1" id="nivel16_1">
                                 <label for="nivel16_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -641,17 +622,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>O plano de contingência do data center é testado com frequência?</td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Procedimentos de Resposta a Incidentes - A.16.1.1) Existem procedimentos e documentados para responder a incidentes específicos que podem afetar a operação do data center?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel17" value="1" id="nivel17_1">
                                 <label for="nivel17_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -679,19 +660,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>São conduzidas revisões periódicas para aprendizados de incidentes anteriores e atualizar o plano se
-                    necessário?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Procedimentos de Resposta a Incidentes - A.16.1.1) Os funcionários são treinados para garantir a execução eficiente desses procedimentos em caso de uma interrupção?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel18" value="1" id="nivel18_1">
                                 <label for="nivel18_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -719,19 +698,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Existem procedimentos e documentados para responder a incidentes específicos que podem afetar a
-                    operação do data center?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Identificação de Ativos Críticos - A.8.1.1) Os ativos críticos do data center foram identificados e priorizados no plano de contingência?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel19" value="1" id="nivel19_1">
                                 <label for="nivel19_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -759,19 +736,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Os funcionários são treinados para garantir a execução eficiente desses procedimentos em caso de uma
-                    interrupção?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Contingência de Resfriamento - A.17.2.1) Existe um plano de contingência para lidar com falhas nos sistemas de resfriamento?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel20" value="1" id="nivel20_1">
                                 <label for="nivel20_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -799,17 +774,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Os ativos críticos do data center foram identificados e priorizados no plano de contingência?</td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Contingência de Resfriamento - A.17.2.1) O plano de contingência inclui procedimentos para garantir que as temperaturas críticas sejam mantidas em caso de falha no sistema de resfriamento?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel21" value="1" id="nivel21_1">
                                 <label for="nivel21_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -837,17 +812,23 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Existe um plano de contingência para lidar com falhas nos sistemas de resfriamento?</td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+            </table>
+            <br><br><br>
+            <table>
+                <th>Controle de Acesso</th>
+            </table>
+            <table>
+                <tr>
+                    <td>(Política de Controle de Acesso - A.9.1.1) Existe uma política de controle de acesso documentada para o data center?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel22" value="1" id="nivel22_1">
                                 <label for="nivel22_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -875,19 +856,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>O plano de contingência inclui procedimentos para garantir que as temperaturas críticas sejam
-                    mantidas em caso de falha no sistema de resfriamento?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Política de Controle de Acesso - A.9.1.1) A política define os requisitos de acesso, incluindo autenticação, autorização e gerenciamento de privilégios?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel23" value="1" id="nivel23_1">
                                 <label for="nivel23_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -915,17 +894,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Existe uma política de controle de acesso documentada para o data center?</td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Controles de Acesso ao Sistema - A.9.4.1) São implementados controles de acesso técnico, como senhas fortes, autenticação multifator e restrições de acesso?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel24" value="1" id="nivel24_1">
                                 <label for="nivel24_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -953,19 +932,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>A política define os requisitos de acesso, incluindo autenticação, autorização e gerenciamento de
-                    privilégios?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Controles de Acesso ao Sistema - A.9.4.1) Existe uma monitorização regular para identificar e corrigir acessos não autorizados ou atividades suspeitas?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel25" value="1" id="nivel25_1">
                                 <label for="nivel25_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -993,19 +970,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>São implementados controles de acesso técnico, como senhas fortes, autenticação multifator e
-                    restrições de acesso?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Registro de Atividades de Acesso - A.12.4.1) São mantidos registros detalhados das atividades de acesso ao data center?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel26" value="1" id="nivel26_1">
                                 <label for="nivel26_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -1033,19 +1008,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Existe uma monitorização regular para identificar e corrigir acessos não autorizados ou atividades
-                    suspeitas?
-                </td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Registro de Atividades de Acesso - A.12.4.1) Os registros incluem informações sobre quem acessou, quando, de onde e quais ações foram realizadas?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel27" value="1" id="nivel27_1">
                                 <label for="nivel27_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -1073,17 +1046,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>São mantidos registros detalhados das atividades de acesso ao data center?</td>
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Gerenciamento de Identidade e Acesso - A.9.2.1) São utilizados procedimentos para gerenciar a atribuição de direitos de acesso aos recursos do data center?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel28" value="1" id="nivel28_1">
                                 <label for="nivel28_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -1111,20 +1084,17 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Os registros incluem informações sobre quem acessou, quando, de onde e quais ações foram
-                    realizadas?
-                </td>
-                /
-                <td></td>
-                <td class="level">
+                    </td>
+                </tr>
+                <tr>
+                    <td>(Gerenciamento de Identidade e Acesso - A.9.2.1) Há um processo eficaz para garantir que os acessos concedidos estejam alinhados com as funções e responsabilidades dos usuários?</td>
+
+                    <td class="level">
                         <span class="rating">
                             <span>
                                 <input type="radio" name="nivel29" value="1" id="nivel29_1">
                                 <label for="nivel29_1"></label>
-                                <div level="Péssimo">Péssimo</div>
+                                <div level="Pessimo">Pessimo</div>
 
                             </span>
                             <span>
@@ -1152,92 +1122,12 @@
 
                             </span>
                         </span>
-                </td>
-            </tr>
-            <tr>
-                <td>São utilizados procedimentos para gerenciar a atribuição de direitos de acesso aos recursos do data
-                    center?
-                </td>
-                <td></td>
-                <td class="level">
-                        <span class="rating">
-                            <span>
-                                <input type="radio" name="nivel30" value="1" id="nivel30_1">
-                                <label for="nivel30_1"></label>
-                                <div level="Péssimo">Péssimo</div>
-
-                            </span>
-                            <span>
-                                <input type="radio" name="nivel30" value="2" id="nivel30_2">
-                                <label for="nivel30_2"></label>
-                                <div level="Ruim">Ruim</div>
-
-                            </span>
-                            <span>
-                                <input type="radio" name="nivel30" value="3" id="nivel30_3">
-                                <label for="nivel30_3"></label>
-                                <div level="Medio">Medio</div>
-
-                            </span>
-                            <span>
-                                <input type="radio" name="nivel30" value="4" id="nivel30_4">
-                                <label for="nivel30_4"></label>
-                                <div level="Bom">Bom</div>
-
-                            </span>
-                            <span>
-                                <input type="radio" name="nivel30" value="5" id="nivel30_5">
-                                <label for="nivel30_5"></label>
-                                <div level="Excelente">Excelente</div>
-
-                            </span>
-                        </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Há um processo eficaz para garantir que os acessos concedidos estejam alinhados com as funções e
-                    responsabilidades dos usuários?
-                </td>
-                <td></td>
-                <td class="level">
-                        <span class="rating">
-                            <span>
-                                <input type="radio" name="nivel31" value="1" id="nivel31_1">
-                                <label for="nivel31_1"></label>
-                                <div level="Péssimo">Péssimo</div>
-
-                            </span>
-                            <span>
-                                <input type="radio" name="nivel31" value="2" id="nivel31_2">
-                                <label for="nivel31_2"></label>
-                                <div level="Ruim">Ruim</div>
-
-                            </span>
-                            <span>
-                                <input type="radio" name="nivel31" value="3" id="nivel31_3">
-                                <label for="nivel31_3"></label>
-                                <div level="Medio">Medio</div>
-
-                            </span>
-                            <span>
-                                <input type="radio" name="nivel31" value="4" id="nivel31_4">
-                                <label for="nivel31_4"></label>
-                                <div level="Bom">Bom</div>
-
-                            </span>
-                            <span>
-                                <input type="radio" name="nivel31" value="5" id="nivel31_5">
-                                <label for="nivel31_5"></label>
-                                <div level="Excelente">Excelente</div>
-
-                            </span>
-                        </span>
-                </td>
-            </tr>
-        </table>
-        <input type="submit" value="Enviar respostas">
-    </form>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" value="Enviar respostas">
+        </form>
+        <script src="{{ url_for('static', filename='forms.js') }}"></script>
+    </div>
 </body>
 </html>
