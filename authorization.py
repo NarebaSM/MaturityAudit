@@ -4,12 +4,23 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import socket
+import pandas as pd
 import json
 import jwt
 import datetime
 import hashlib
 import base64
 import re
+import io
+import json
+import statistics
+import matplotlib.pyplot as plt
+from io import BytesIO
+from flask import render_template, send_file
+from flask import request, redirect, url_for, render_template, send_file
+import json
+import plotly.express as px
+from collections import Counter
 
 
 def generate_token(username, secret):
@@ -20,6 +31,7 @@ def generate_token(username, secret):
     }
     token = jwt.encode(payload, secret, algorithm='HS256')
     return token
+
 
 def generate_secret_key(username, password):
     # Combine username e password para criar uma chave única
@@ -43,10 +55,10 @@ def getUserItems(username):
         if validate == "no":
             return None
 
+
 def sendMail(email):
     remetente = "no-reply.segma5@change.pass"
     destinatario = email
-
 
 
 try:
@@ -58,18 +70,20 @@ except:
     ip = "127.0.0.1"
     print(f"!!!error connecting to internet, setting ip localhost!!!")
 app = Flask(__name__)
-CORS(app, supports_credentials=True, origins=['auditsegma5.ddns.net', '191.182.179.92:9876'], headers=['Content-Type', 'Authorization', 'secret'])
+CORS(app, supports_credentials=True, origins=['auditsegma5.ddns.net', '191.182.179.92:9876'],
+     headers=['Content-Type', 'Authorization', 'secret'])
 app.config['SESSION_COOKIE_DOMAIN'] = 'auditsegma5.ddns.net'
 
 app.secret_key = 'achavedosucessoeosucesso'
+
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-
     if request.method == 'GET':
         return render_template('index.html')
     else:
@@ -98,7 +112,6 @@ def login():
 
 @app.route('/forms', methods=['GET'])
 def forms():
-
     token = request.cookies.get('Authorization')
 
     if token and token.startswith('Bearer'):
@@ -134,33 +147,72 @@ def forms():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    count = 0
-    userResp = {}
-    while count < 19:
-        userResp[f"questao{count}"] = request.form.get(f"nivel{count}")
-        count = count +1
     respostas = []
-    with open('responses.json', 'r') as resps:
-        respostas = json.load(resps)
+    for i in range(31):
+        resposta = request.form.get(f'nivel{i}')
+        respostas.append(resposta)
 
-    print(f"respostas = {respostas}")
-    usr = request.cookies.get('username')
+    mapeamento = {
+        '1': 'Péssimo',
+        '2': 'Ruim',
+        '3': 'Medio',
+        '4': 'Bom',
+        '5': 'Excelente'
+    }
 
-    print(f"respostas gsm = {respostas[f'{usr}']}")
+    cores = ['red', 'orange', 'yellow', 'lightgreen', 'green']
 
-    oldResp = respostas[f'{usr}']
-    print(f"old resp = {oldResp}")
-    oldResp.append(userResp)
-    print(f"append resp = {oldResp}")
-    respostas[f'{usr}'] = oldResp
-    with open('responses.json', 'w') as wArq:
-        json.dump(respostas, wArq, indent=4)
+    opcoes = [mapeamento[resp] for resp in respostas if resp in mapeamento]
 
-    return "Request Submited :)"
+    count_respostas = Counter(opcoes)
+
+    contagens = [count_respostas[opcao] for opcao in mapeamento.values()]
+
+    total_respostas = sum(contagens)
+
+    porcentagens = [round((contagem / total_respostas) * 100) for contagem in contagens]
+
+    plt.figure(figsize=(10, 6))
+    bars = plt.bar(mapeamento.values(), contagens, color=cores)
+
+    for bar, porcentagem in zip(bars, porcentagens):
+        plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height() - 0.5, f'{porcentagem}%',
+                 ha='center', va='bottom', color='black', fontsize=10)
+
+    plt.xlabel('')
+    plt.ylabel('Quantidade')
+    plt.title('Contagem de Respostas por Opção')
+
+    plt.ylim(0, total_respostas)
+
+    plt.savefig('static/respostas_grafico.png')
+
+    return redirect(url_for('result'))
+
+
+@app.route('/result')
+def result():
+    return render_template('result.html')
+
+
+@app.route('/get_chart')
+def get_chart():
+    return redirect(url_for('static', filename='respostas_grafico.png'))
+
+
+@app.route('/download_chart')
+def download_chart():
+    # Caminho para o arquivo de imagem gerado
+    chart_path = 'static/respostas_grafico.png'
+
+    # Retorna o arquivo para download
+    return send_file(chart_path, as_attachment=True)
+
 
 @app.route('/register', methods=['GET'])
 def register():
     return render_template('register.html')
+
 
 @app.route('/registerSub', methods=['POST'])
 def registerSub():
@@ -186,12 +238,14 @@ def registerSub():
             secret = generate_secret_key(usernameReg, passwordReg)
             with open('pass.json', 'r') as passArq:
                 pass_data = json.load(passArq)
-            newPass = {"username": f"{usernameReg}", "email": f"{emailReg}", "CNPJ": f"{CNPJReg}", "password": f"{passwordReg}", "secretId": f"{secret}"}
+            newPass = {"username": f"{usernameReg}", "email": f"{emailReg}", "CNPJ": f"{CNPJReg}",
+                       "password": f"{passwordReg}", "secretId": f"{secret}"}
             pass_data.append(newPass)
             with open('pass.json', 'w') as wPass:
                 json.dump(pass_data, wPass, indent=4)
     success_message = "Register success"
     return render_template('index.html', successReg=success_message)
+
 
 @app.route('/changePass', methods=['GET', 'POST'])
 def changePass():
